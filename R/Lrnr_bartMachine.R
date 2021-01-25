@@ -70,7 +70,7 @@ Lrnr_bartMachine <- R6Class(
   ),
 
   private = list(
-    .properties = c("continuous", "binomial", "categorical"),
+    .properties = c("continuous", "binomial"),
 
     .train = function(task) {
       args <- self$params
