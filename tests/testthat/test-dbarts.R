@@ -1,4 +1,4 @@
-context("test barts: bartMachine and dbart")
+context("test dbart")
 
 library(dbarts)
 
