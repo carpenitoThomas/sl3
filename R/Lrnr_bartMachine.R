@@ -75,6 +75,10 @@ Lrnr_bartMachine <- R6Class(
     .train = function(task) {
       args <- self$params
       outcome_type <- self$get_outcome_type(task)
+      
+      if (outcome_type$type == "categorical") {
+        stop("Lrnr_dbarts does not work for categorical outcomes")
+      }
 
       # specify data
       args$X <- as.data.frame(task$X)
