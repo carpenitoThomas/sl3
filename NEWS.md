@@ -1,3 +1,43 @@
+# sl3 1.4.3
+* Additional arguments for 'Keras' learners `Lrnr_lstm_keras` and
+  `Lrnr_gru_keras` provide support for callback functions list and 2-layer
+  networks. Default `callbacks` list provides early stopping criteria with
+  respect to 'Keras' defaults and `patience` of 10 epochs. Also, these two 
+  'Keras' learners now call `args_to_list` upon initialization, and set 
+  verbose argument according to `options("keras.fit_verbose")` or 
+  `options("sl3.verbose")`.
+* Update `Lrnr_xgboost` to support prediction tasks consisting of one
+  observation (e.g., leave-one-out cross-validation).
+* Update `Lrnr_sl` by adding a new private slot `.cv_risk` to store the risk
+  estimates, using this to avoid unnecessary re-computation in the `print`
+  method (the `.cv_risk` slot is populated on the first `print` call, and only
+  ever re-printed thereafter).
+* Update documentation of `default_metalearner` to use native markdown tables.
+* Fix `Lrnr_screener_importance`'s pairing of (a) covariates returned by the 
+  importance function with (b) covariates as they are defined in the task. This 
+  issue only arose when discrete covariates were automatically one-hot encoded 
+  upon task initiation (i.e., when `colnames(task$X) != task$nodes$covariates`).
+* Reformat `importance_plot` to plot variables in decreasing order of 
+  importance, so most important variables are placed at the top of the dotchart. 
+  
+
+# sl3 1.4.2
+* Updates to variable importance functionality, including calculation of risk
+  ratio and risk differences under covariate deletion or permutation.
+* Addition of a `importance_plot` to summarize variable importance findings.
+* Additions of new methods `reparameterize` and `retrain` to `Lrnr_base`, which
+  allows modification of the covariate set while training on a conserved task
+  and prediction on a new task using previously trained learners, respectively.
+
+# sl3 1.4.1
+* [TODO]
+
+# sl3 1.4.0
+* [TODO]
+
+# sl3 1.3.9
+* [TODO]
+
 # sl3 1.3.8
 * Updates to variable importance functionality, including use of risk ratios.
 * Change `Lrnr_hal9001` and `Lrnr_glmnet` to respect observation-level IDs.

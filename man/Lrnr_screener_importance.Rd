@@ -5,29 +5,39 @@
 \alias{Lrnr_screener_importance}
 \title{Variable Importance Screener}
 \format{
-\code{\link{R6Class}} object.
+An \code{\link[R6]{R6Class}} object inheriting from
+\code{\link{Lrnr_base}}.
 }
 \value{
-Learner object with methods for training and prediction. See
-\code{\link{Lrnr_base}} for documentation on learners.
+A learner object inheriting from \code{\link{Lrnr_base}} with
+methods for training and prediction. For a full list of learner
+functionality, see the complete documentation of \code{\link{Lrnr_base}}.
 }
 \description{
-This learner provides screening of covariates based on the variables sorted
-in decreasing order of importance, where the importance metric is based on
-a learner that supports importance.
+This learner screens covariates based on their variable importance, where the
+importance values are obtained from the \code{learner}. Any learner with an
+\code{importance} method can be used. The set of learners with support for
+\code{importance} can be found with \code{sl3_list_learners("importance")}.
+Like all other screeners, this learner is intended for use in a
+\code{\link{Pipeline}}, so the output from this learner (i.e., the selected
+covariates) can be used as input for the next learner in the pipeline.
 }
 \section{Parameters}{
 
-\describe{
-\item{\code{learner}}{An instantiated learner that supports variable
-importance.}
-\item{\code{num_screen = 5}}{The top number of most important variables
-to retain.}
-\item{\code{...}}{Other parameters passed to \code{learner}'s
-\code{importance} function.}
+\itemize{
+\item \code{learner}: An instantiated learner that supports variable importance.
+The set of learners with this support can be obtained via
+\code{sl3_list_learners("importance")}.
+\item \code{num_screen = 5}: The top n number of "most impotant" variables to
+retain.
+\item \code{...}: Other parameters passed to \code{learner}'s \code{importance}
+function.
 }
 }
 
+\examples{
+
+}
 \seealso{
 Other Learners: 
 \code{\link{Custom_chain}},
@@ -53,12 +63,14 @@ Other Learners:
 \code{\link{Lrnr_glmnet}},
 \code{\link{Lrnr_glm}},
 \code{\link{Lrnr_grf}},
+\code{\link{Lrnr_gru_keras}},
 \code{\link{Lrnr_gts}},
 \code{\link{Lrnr_h2o_grid}},
 \code{\link{Lrnr_hal9001}},
 \code{\link{Lrnr_haldensify}},
 \code{\link{Lrnr_hts}},
 \code{\link{Lrnr_independent_binomial}},
+\code{\link{Lrnr_lstm_keras}},
 \code{\link{Lrnr_lstm}},
 \code{\link{Lrnr_mean}},
 \code{\link{Lrnr_multiple_ts}},
