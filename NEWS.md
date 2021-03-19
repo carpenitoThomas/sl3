@@ -23,7 +23,14 @@
   interactions that involve factors. This method is most commonly used by 
   `Lrnr_define_interactions`, which is intended for use with another learner 
   (e.g., `Lrnr_glmnet` or `Lrnr_glm`) in a `Pipeline`.
-  
+* Modified `Lrnr_gam` formula (if not specified by user) to not use `mgcv`'s 
+  default `k=10` degrees of freedom for each smooth `s` term when there are 
+  less than `k=10` degrees of freedom. This bypasses an `mgcv::gam` error, and 
+  tends to be relevant only for small n. 
+* Added `options(java.parameters = "-Xmx2500m")` and warning message when 
+  `Lrnr_bartMachine` is initialized, if this option has not already been set. 
+  This option was incorporated since the default RAM of 500MB for a Java 
+  virtual machine often errors due to memory issues with `Lrnr_bartMachine`.
 
 # sl3 1.4.2
 * Updates to variable importance functionality, including calculation of risk

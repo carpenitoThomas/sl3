@@ -1,10 +1,10 @@
 #' xgboost: eXtreme Gradient Boosting
 #'
-#' This learner provides fitting procedures for \code{xgboost} models, using the
-#' \code{xgboost} package, using the \code{\link[xgboost]{xgb.train}} function.
-#' Such models are classification and regression trees with extreme gradient
+#' This learner provides fitting procedures for \code{xgboost} models, using
+#' the \pkg{xgboost} package, using \code{\link[xgboost]{xgb.train}}. Such
+#' models are classification and regression trees with extreme gradient
 #' boosting. For details on the fitting procedure, consult the documentation of
-#' the \code{xgboost} package.
+#' the \pkg{xgboost}.
 #'
 #' @docType class
 #'
@@ -99,11 +99,13 @@ Lrnr_xgboost <- R6Class(
       if (is.null(args$objective)) {
         if (outcome_type$type == "binomial") {
           args$objective <- "binary:logistic"
+          args$eval_metric <- "logloss"
         } else if (outcome_type$type == "quasibinomial") {
           args$objective <- "reg:logistic"
         } else if (outcome_type$type == "categorical") {
           args$objective <- "multi:softprob"
           args$num_class <- length(outcome_type$levels)
+          args$eval_metric <- "mlogloss"
         }
       }
       fit_object <- call_with_args(xgboost::xgb.train, args, keep_all = TRUE)
@@ -124,10 +126,18 @@ Lrnr_xgboost <- R6Class(
       if (is.integer(Xmat)) {
         Xmat[, 1] <- as.numeric(Xmat[, 1])
       }
-      # order of columns has to be the same in xgboost training and test data
-      Xmat <- as.matrix(Xmat[, match(fit_object$feature_names, colnames(Xmat))])
 
-      xgb_data <- try(xgboost::xgb.DMatrix(Xmat))
+      # order of columns has to be the same in xgboost training and test data
+      Xmat_matched <- as.matrix(
+        Xmat[, match(fit_object$feature_names, colnames(Xmat))]
+      )
+      if (nrow(Xmat_matched) != nrow(Xmat) & ncol(Xmat_matched) == nrow(Xmat)) {
+        Xmat_matched <- t(Xmat_matched)
+      }
+      stopifnot(nrow(Xmat_matched) == nrow(Xmat))
+
+      # convert to xgb.DMatrix
+      xgb_data <- try(xgboost::xgb.DMatrix(Xmat_matched))
 
       if (self$fit_object$training_offset) {
         offset <- task$offset_transformed(self$fit_object$link_fun,
